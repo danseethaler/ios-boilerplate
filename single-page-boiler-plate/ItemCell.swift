@@ -14,9 +14,10 @@ class ItemCell: UITableViewCell {
     
     @IBOutlet weak var mainTitle: UILabel!
     @IBOutlet weak var mainImg: UIImageView!
-    @IBOutlet weak var mainDescription: UITextView!
+    @IBOutlet weak var mainDescription: UILabel!
     
     var item: Item!
+    var request: Request?
     static var imageCache = NSCache()
     
     override func awakeFromNib() {
@@ -31,6 +32,8 @@ class ItemCell: UITableViewCell {
         
         self.item = item
         
+        mainImg.image = nil
+        
         if let title = item.title {
             mainTitle.text = title.uppercaseString
         }
@@ -39,9 +42,7 @@ class ItemCell: UITableViewCell {
         
         // mainDescription formatting
         mainDescription.userInteractionEnabled = false
-        mainDescription.editable = false
         mainDescription.sizeToFit()
-        mainDescription.textContainer.maximumNumberOfLines = 4
         
         if img != nil {
             
@@ -49,14 +50,16 @@ class ItemCell: UITableViewCell {
             
         } else {
             
-            if let image_main = item.image_main {
-                Alamofire.request(.GET, image_main).validate(contentType: ["image/*"]).response(completionHandler: { (request, response, data, err) in
+            if let image_main = item.imageThumbUrl {
+                request = Alamofire.request(.GET, image_main).validate(contentType: ["image/*"]).response(completionHandler: { (request, response, data, err) in
+                    
+                    print(request?.URLRequest)
                     
                     if err == nil {
                         
                         let img = UIImage(data: data!)!
                         self.mainImg.image = img
-                        ItemCell.imageCache.setObject(img, forKey: self.item.image_main!)
+                        ItemCell.imageCache.setObject(img, forKey: self.item.imageThumbUrl!)
                         
                         
                     }else {

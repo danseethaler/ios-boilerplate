@@ -53,6 +53,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if let cell = tableView.dequeueReusableCellWithIdentifier("ItemCell") as? ItemCell {
             
+            cell.request?.cancel()
+            
             let item = items[indexPath.row]
             
             let img = ItemCell.imageCache.objectForKey(item.image_main!) as? UIImage
