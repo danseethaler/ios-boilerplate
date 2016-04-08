@@ -11,28 +11,67 @@ import UIKit
 
 class Item {
     
-    private var _title: String!
-    private var _description: String!
-    private var _imageURL: NSURL!
-    var imageView: UIImageView!
+    private var _title: String?
+    private var _description: String?
+    private var _image_main: String?
+    private var _imageThumbUrl: NSURL?
+    private var _imageHRUrl: NSURL?
     
-    var title: String {
+    var title: String? {
         return _title
     }
     
-    var description: String {
+    var description: String? {
         return _description
     }
     
-    var imageURL: NSURL {
-        return _imageURL
+    var image_main: String? {
+        return _image_main
+    }
+    
+    var imageThumbUrl: NSURL? {
+        return _imageThumbUrl
+    }
+    
+    var imageHRUrl: NSURL? {
+        return _imageHRUrl
     }
 
-    init(title:String?, description: String?, imageURL: NSURL?) {
+    
+    init(data:AnyObject) {
         
-        self._title = title
-        self._description = description
-        self._imageURL = imageURL
+        
+        if let title = data["title"] as? String {
+            _title = title
+        }
+        
+        if let description = data["description"] as? String {
+            _description = description
+        }
+        
+        if let image_main = data["image_main"] as? String {
+            _image_main = image_main
+            
+            _imageThumbUrl = getImgUrlScaled(300)
+            _imageHRUrl = getImgUrlScaled(1500)
+            
+        }
+        
+        
+    }
+    
+    
+    
+    func getImgUrlScaled(scale:Int) -> NSURL? {
+        
+        if let image_mainString = image_main {
+            
+            let thumbUrl = image_mainString.stringByReplacingOccurrencesOfString("/df/", withString: "/maxD_\(scale)/")
+            
+            return NSURL(string: thumbUrl);
+        }
+        
+        return nil
         
     }
     

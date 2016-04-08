@@ -31,13 +31,17 @@ class ItemCell: UITableViewCell {
         
         self.item = item
         
-        mainTitle.text = item.title.uppercaseString
+        if let title = item.title {
+            mainTitle.text = title.uppercaseString
+        }
+        
         mainDescription.text = item.description
         
         // mainDescription formatting
         mainDescription.userInteractionEnabled = false
         mainDescription.editable = false
         mainDescription.sizeToFit()
+        mainDescription.textContainer.maximumNumberOfLines = 4
         
         if img != nil {
             
@@ -45,21 +49,23 @@ class ItemCell: UITableViewCell {
             
         } else {
             
-            Alamofire.request(.GET, item.imageURL).validate(contentType: ["image/*"]).response(completionHandler: { (request, response, data, err) in
-                
-                if err == nil {
+            if let image_main = item.image_main {
+                Alamofire.request(.GET, image_main).validate(contentType: ["image/*"]).response(completionHandler: { (request, response, data, err) in
                     
-                    let img = UIImage(data: data!)!
-                    self.mainImg.image = img
-                    ItemCell.imageCache.setObject(img, forKey: self.item.imageURL)
+                    if err == nil {
+                        
+                        let img = UIImage(data: data!)!
+                        self.mainImg.image = img
+                        ItemCell.imageCache.setObject(img, forKey: self.item.image_main!)
+                        
+                        
+                    }else {
+                        print(request)
+                        print(err.debugDescription)
+                    }
                     
-                    
-                }else {
-                    print(request)
-                    print(err.debugDescription)
-                }
-                
-            })
+                })
+            }
         }
         
     }

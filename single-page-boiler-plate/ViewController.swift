@@ -18,6 +18,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.navigationBar.barStyle = UIBarStyle.BlackTranslucent
+        self.navigationController?.navigationBar.barTintColor = UIColor(red: 122/255, green: 170/255, blue: 61/255, alpha: 1)
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -49,12 +53,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if let cell = tableView.dequeueReusableCellWithIdentifier("ItemCell") as? ItemCell {
             
+            let item = items[indexPath.row]
             
-            let item: Item!
-            
-            item = items[indexPath.row]
-            
-            let img: UIImage? = ItemCell.imageCache.objectForKey(item.imageURL) as? UIImage
+            let img = ItemCell.imageCache.objectForKey(item.image_main!) as? UIImage
             
             cell.configureCell(item, img: img)
             
@@ -64,16 +65,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         return ItemCell()
         
-        
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        let item: Item!
-        
-        item = items[indexPath.row]
-        
-        performSegueWithIdentifier("ItemDetailVC", sender: item)
+        performSegueWithIdentifier("ItemDetailVC", sender: items[indexPath.row])
         
     }
     

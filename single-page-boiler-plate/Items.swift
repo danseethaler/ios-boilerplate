@@ -28,23 +28,10 @@ class Items {
                     
                     for item in itemsList as! [Dictionary<String, AnyObject>] {
                         
-                        let imageURLString:String = item["imageURL"] as! String
+                        let itemOb = Item(data: item)
                         
-                        let imageUrlVal = NSURL(string: imageURLString)
-                        
-                        let itemTitle = item["title"] as! String
-                        
-                        let optionalDescription:String! = ""
-                        
-                        if let itemDescription = item["description"] as? String {
-                            let itemOb = Item(title: itemTitle, description: itemDescription, imageURL: imageUrlVal!)
-                            self.items.append(itemOb)
-                        }else {
-                            let itemOb = Item(title: itemTitle, description: optionalDescription!, imageURL: imageUrlVal!)
-                            self.items.append(itemOb)
-                        }
-                        
-                        
+                        self.items.append(itemOb)
+                                                
                     }
                     
                 }
